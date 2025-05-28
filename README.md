@@ -102,10 +102,58 @@ imsa-procesos/
 ## 🔧 Desarrollo
 
 - **Framework**: Next.js 15.2.3
-- **Editor**: Quill.js (carga dinámica)
+- **Editor**: HTML contentEditable nativo (compatible con todos los navegadores)
 - **PDF**: Browserless/Chromium
 - **IA**: Mistral AI
 - **Estilos**: CSS-in-JS con styled-jsx
+
+## 🚀 Deployment
+
+### Preparación para Deploy
+
+1. **Verificar build local**:
+```bash
+npm run build
+```
+
+2. **Configurar variables de entorno en producción**:
+   - En Vercel: Project Settings → Environment Variables
+   - Agregar `BROWSERLESS_TOKEN` y `MISTRAL_API_KEY`
+
+### Deploy en Vercel
+
+1. **Conectar repositorio**:
+   - Conecta tu repositorio de GitHub/GitLab a Vercel
+   - Vercel detectará automáticamente que es un proyecto Next.js
+
+2. **Configurar variables de entorno**:
+   ```env
+   BROWSERLESS_TOKEN=tu_token_real
+   MISTRAL_API_KEY=tu_token_real
+   ```
+
+3. **Deploy automático**:
+   - Cada push a la rama principal desplegará automáticamente
+
+### Solución de Errores de Build Comunes
+
+#### Error de ESLint con comillas
+- **Error**: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`
+- **Solución**: ✅ Ya solucionado - Usamos entidades HTML escapadas
+
+#### Warning de imagen no optimizada
+- **Error**: Using `<img>` could result in slower LCP
+- **Solución**: ✅ Ya solucionado - Usamos `<Image />` de Next.js
+
+#### Error de variables de entorno
+- **Error**: Variables no definidas en producción
+- **Solución**: Configurar variables en el panel de Vercel
+
+### URLs de Producción
+
+Una vez desplegado, tu aplicación estará disponible en:
+- **Vercel**: `https://tu-proyecto.vercel.app`
+- **Dominio personalizado**: Configurable en Vercel
 
 ## 📚 Documentación Completa
 
@@ -132,3 +180,11 @@ Incluso sin configurar tokens, puedes:
 - ✅ Grabar y transcribir voz
 - ❌ Generar PDFs (requiere Browserless token)
 - ❌ Mejorar texto con IA (requiere Mistral token)
+
+## 📈 Estado del Proyecto
+
+- ✅ **Build exitoso**: Sin errores de linting o compilación
+- ✅ **Editor funcional**: contentEditable nativo, sin dependencias problemáticas
+- ✅ **Deploy ready**: Optimizado para producción
+- ✅ **Documentación completa**: README y documentación técnica
+- ✅ **Variables de entorno**: Configuración clara y ejemplos
