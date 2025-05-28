@@ -58,7 +58,7 @@ http://localhost:3000
 
 ## ✨ Características
 
-- **Editor de texto enriquecido**: Formato completo con listas, negritas, cursivas, encabezados
+- **Editor de texto simple**: Textarea optimizado para contenido estructurado
 - **Generación de PDF**: PDFs profesionales con formato preservado
 - **Asistencia de IA**: Mejora automática de texto (requiere token de Mistral)
 - **Grabación de voz**: Transcripción automática de audio
@@ -74,10 +74,6 @@ http://localhost:3000
 - **Causa**: No has configurado `MISTRAL_API_KEY` en `.env.local`
 - **Solución**: La función de IA es opcional. El sistema funciona sin ella, pero puedes obtener un token en [console.mistral.ai](https://console.mistral.ai) para habilitar esta función
 
-### Dos barras de edición aparecen
-- **Causa**: Problema de carga del editor
-- **Solución**: Actualiza la página. El editor se carga dinámicamente para mejor compatibilidad
-
 ### Error de permisos en Windows
 - **Causa**: Archivos de Next.js bloqueados
 - **Solución**: Ejecuta como administrador o cambia permisos de la carpeta `.next`
@@ -91,10 +87,8 @@ imsa-procesos/
 │   │   ├── generar-pdf/     # API de generación de PDFs
 │   │   └── mejorar-texto/   # API de mejora con IA
 │   └── page.js              # Página principal
-├── components/
-│   └── RichTextEditor.js    # Editor de texto enriquecido
 ├── lib/
-│   └── htmlProcessor.js     # Procesador de HTML para PDF
+│   └── htmlProcessor.js     # Procesador de texto para PDF
 ├── env.example              # Ejemplo de variables de entorno
 └── cambios.md              # Documentación detallada
 ```
@@ -102,10 +96,32 @@ imsa-procesos/
 ## 🔧 Desarrollo
 
 - **Framework**: Next.js 15.2.3
-- **Editor**: HTML contentEditable nativo (compatible con todos los navegadores)
+- **Editor**: Textarea simple con procesamiento inteligente de texto
 - **PDF**: Browserless/Chromium
 - **IA**: Mistral AI
 - **Estilos**: CSS-in-JS con styled-jsx
+
+## 📝 Formato de Texto Soportado
+
+El sistema detecta y convierte automáticamente:
+- **Listas numeradas**: `1. Elemento`, `2. Elemento`
+- **Sublistas**: `a) Subelemento`, `b) Subelemento`
+- **Viñetas**: `- Elemento` o `• Elemento`
+- **Párrafos**: Texto separado por líneas en blanco
+- **Saltos de línea**: Se preservan automáticamente
+
+### Ejemplo de formato:
+```
+Tipos de servicios:
+1. Trámites
+2. Traslado de personal IMSA
+   a) Por Agencia Viey
+   b) Por Cabifi
+3. Traslado de visitas
+
+Consideraciones:
+Los servicios deben ser contratados...
+```
 
 ## 🚀 Deployment
 
@@ -139,7 +155,7 @@ npm run build
 
 #### Error de ESLint con comillas
 - **Error**: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`
-- **Solución**: ✅ Ya solucionado - Usamos entidades HTML escapadas
+- **Solución**: ✅ Ya solucionado - Código optimizado
 
 #### Warning de imagen no optimizada
 - **Error**: Using `<img>` could result in slower LCP
@@ -174,7 +190,7 @@ Si tienes problemas:
 ## 🚀 Funcionalidades Disponibles Sin Tokens
 
 Incluso sin configurar tokens, puedes:
-- ✅ Usar el editor de texto enriquecido
+- ✅ Usar el editor de texto con formato automático
 - ✅ Crear contenido estructurado
 - ✅ Ver vista previa del documento
 - ✅ Grabar y transcribir voz
@@ -184,7 +200,8 @@ Incluso sin configurar tokens, puedes:
 ## 📈 Estado del Proyecto
 
 - ✅ **Build exitoso**: Sin errores de linting o compilación
-- ✅ **Editor funcional**: contentEditable nativo, sin dependencias problemáticas
+- ✅ **Editor optimizado**: Textarea simple con procesamiento inteligente
 - ✅ **Deploy ready**: Optimizado para producción
 - ✅ **Documentación completa**: README y documentación técnica
 - ✅ **Variables de entorno**: Configuración clara y ejemplos
+- ✅ **Formato automático**: Convierte texto plano a listas estructuradas en PDF

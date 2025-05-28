@@ -1,16 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
-// If you have Lucide icons installed, uncomment this line:
-// import { Mic, FileText, Save, ArrowLeft, ArrowRight, Sparkles, Download } from 'lucide-react';
-
-// Importar el editor de texto enriquecido dinámicamente
-const RichTextEditor = dynamic(() => import('../components/RichTextEditor'), {
-  ssr: false,
-  loading: () => <p>Cargando editor...</p>
-})
 
 export default function Transcribir() {
   const [showIntro, setShowIntro] = useState(true)
@@ -33,7 +24,6 @@ export default function Transcribir() {
   const [processingAI, setProcessingAI] = useState(false)
   const [generatingPDF, setGeneratingPDF] = useState(false)
   const [activeTab, setActiveTab] = useState("resumen")
-  const [useRichText, setUseRichText] = useState(true) // Nuevo estado para el modo de editor
 
   // Animation timing effect
   useEffect(() => {
@@ -142,30 +132,6 @@ export default function Transcribir() {
     setTextoTemporal("")
   }
 
-  // Función para alternar entre modo texto plano y enriquecido
-  const toggleEditorMode = () => {
-    setUseRichText(!useRichText)
-    // Si el texto actual es HTML y cambiamos a texto plano, convertir
-    if (useRichText && textoTemporal.includes('<')) {
-      // Convertir HTML básico a texto plano
-      const plainText = textoTemporal
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<\/p>/gi, '\n')
-        .replace(/<p>/gi, '')
-        .replace(/<[^>]*>/g, '')
-        .replace(/&nbsp;/g, ' ')
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-      setTextoTemporal(plainText)
-    }
-  }
-
-  // Función para manejar cambios en el editor de texto enriquecido
-  const handleRichTextChange = (content) => {
-    setTextoTemporal(content)
-  }
-
   // Icons as SVG if Lucide is not installed
   const IconMic = () => (
     <svg
@@ -268,23 +234,6 @@ export default function Transcribir() {
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
       <polyline points="7 10 12 15 17 10"></polyline>
       <line x1="12" x2="12" y1="15" y2="3"></line>
-    </svg>
-  )
-
-  const IconEdit = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
-      <path d="m15 5 4 4"></path>
     </svg>
   )
 
@@ -475,31 +424,6 @@ export default function Transcribir() {
     alignItems: "center",
     justifyContent: "center",
     gap: "0.5rem",
-  }
-
-  // Nuevos estilos para el toggle del editor
-  const editorToggleStyle = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: "1rem",
-    padding: "0.5rem",
-    backgroundColor: "#f8f9fa",
-    borderRadius: "0.375rem",
-    border: "1px solid #e5e7eb",
-  }
-
-  const toggleButtonStyle = {
-    padding: "0.25rem 0.75rem",
-    backgroundColor: useRichText ? "#F1291C" : "#6b7280",
-    color: "white",
-    border: "none",
-    borderRadius: "0.25rem",
-    cursor: "pointer",
-    fontSize: "0.875rem",
-    display: "flex",
-    alignItems: "center",
-    gap: "0.25rem",
   }
 
   const cardFooterStyle = {
@@ -783,35 +707,15 @@ export default function Transcribir() {
                   {grabando ? "Grabando..." : "Iniciar Grabación de Voz"}
                 </button>
               </div>
-              
-              {/* Toggle para cambiar modo de editor */}
-              <div style={editorToggleStyle}>
-                <span style={{ fontSize: "0.875rem", color: "#374151" }}>
-                  {useRichText ? "Editor de texto enriquecido activo" : "Editor de texto plano activo"}
-                </span>
-                <button onClick={toggleEditorMode} style={toggleButtonStyle}>
-                  <IconEdit />
-                  {useRichText ? "Cambiar a texto plano" : "Cambiar a texto enriquecido"}
-                </button>
-              </div>
 
-              {/* Editor condicional */}
+              {/* Editor de texto plano */}
               <div style={{ marginBottom: "1rem" }}>
-                {useRichText ? (
-                  <RichTextEditor
-                    value={textoTemporal}
-                    onChange={handleRichTextChange}
-                    placeholder={`Escribe aquí el contenido de la sección ${secciones[seccionActual].nombre}...`}
-                    height="250px"
-                  />
-                ) : (
-                  <textarea
-                    value={textoTemporal}
-                    onChange={(e) => setTextoTemporal(e.target.value)}
-                    placeholder={`Habla o escribe aquí el contenido de la sección ${secciones[seccionActual].nombre}...`}
-                    style={textareaStyle}
-                  />
-                )}
+                <textarea
+                  value={textoTemporal}
+                  onChange={(e) => setTextoTemporal(e.target.value)}
+                  placeholder={`Habla o escribe aquí el contenido de la sección ${secciones[seccionActual].nombre}...`}
+                  style={textareaStyle}
+                />
               </div>
 
               <div style={buttonGroupStyle}>
@@ -952,10 +856,9 @@ export default function Transcribir() {
                     <div key={index} style={sectionItemStyle}>
                       <h4 style={sectionItemTitleStyle}>{seccion.nombre}</h4>
                       {documento[seccion.clave] ? (
-                        <div 
-                          style={sectionItemContentStyle}
-                          dangerouslySetInnerHTML={{ __html: documento[seccion.clave] }}
-                        />
+                        <div style={sectionItemContentStyle}>
+                          {documento[seccion.clave]}
+                        </div>
                       ) : (
                         <p style={sectionItemEmptyStyle}>No completado</p>
                       )}
