@@ -242,7 +242,7 @@ const RichTextEditor = ({ value, onChange, placeholder, height = '200px' }) => {
           onClick={() => formatBlock('blockquote')}
           title="Cita"
         >
-          ""
+          &ldquo;&rdquo;
         </button>
         
         <button 

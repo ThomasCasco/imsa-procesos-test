@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 // If you have Lucide icons installed, uncomment this line:
 // import { Mic, FileText, Save, ArrowLeft, ArrowRight, Sparkles, Download } from 'lucide-react';
 
@@ -743,10 +744,12 @@ export default function Transcribir() {
       {/* Main Application */}
       <div style={containerStyle}>
         <div style={headerStyle}>
-          <img
+          <Image
             src="/logo_rojo.png"
             alt="Banner descriptivo"
-            style={{ display: "block", margin: "0 auto 1rem", maxWidth: "50%" }}
+            width={400}
+            height={200}
+            style={{ display: "block", margin: "0 auto 1rem", maxWidth: "50%", height: "auto" }}
           />
           <h1 style={titleStyle}>IMSA + Procesos</h1>
           <p style={subtitleStyle}>Cree y mejore documentos de procedimientos con asistencia de IA</p>
